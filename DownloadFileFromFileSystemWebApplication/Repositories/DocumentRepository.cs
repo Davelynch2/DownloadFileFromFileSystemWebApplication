@@ -12,10 +12,12 @@ namespace DownloadFileFromFileSystemWebApplication.Repositories
     public class DocumentRepository : IDocumentRepository
     {
         private readonly DocumentContext _context;
+        private readonly FileCache _fileCache;
 
-        public DocumentRepository(DocumentContext documentContext)
+        public DocumentRepository(DocumentContext documentContext, FileCache cache)
         {
             _context = documentContext;
+            _fileCache = cache;
         }
 
         public async Task Create(DocumentUpload documentUpload)
@@ -23,13 +25,14 @@ namespace DownloadFileFromFileSystemWebApplication.Repositories
             var file = documentUpload.GetByteArrayData();
             var document = new Document(documentUpload);
 
+            _fileCache.TryAdd(document);
             WriteFile(document.Location, file);
 
             _context.Documents.Add(document);
             await Save();
         }
 
-        private void WriteFile(string location, byte[] file) => System.IO.File.WriteAllBytes(location, file);
+        private void WriteFile(string location, byte[] file) => File.WriteAllBytes(location, file);
 
         public Task Save() => _context.SaveChangesAsync();
 
@@ -38,6 +41,15 @@ namespace DownloadFileFromFileSystemWebApplication.Repositories
             var document = await _context.Documents.Where(d => d.Id == id).FirstOrDefaultAsync();
             return GetDocumentData(document);
         }
+
+        //private Document TryGetValueOrAddValue(Guid id)
+        //{
+        //    return !_fileCache.TryGetValue(id, out var fileLocation) ?
+        //}
+        //private string AddValueFromDbToCache(Guid id)
+        //{
+
+        //}
 
         // Read document document location
         private FileStreamResult GetDocumentData(Document document)
@@ -50,6 +62,13 @@ namespace DownloadFileFromFileSystemWebApplication.Repositories
 
             return result;
         }
+
+        public async Task<Document> FindDocument(Guid id)
+        {
+            return await _context.Documents.Where(d => d.Id == id).FirstOrDefaultAsync();
+        }
+
+
     }
 
  

@@ -12,5 +12,6 @@ namespace DownloadFileFromFileSystemWebApplication.Repositories
         Task Create(DocumentUpload documentUpload);
         Task Save();
         Task<FileStreamResult> FindDocumentData(Guid id);
+        Task<Document> FindDocument(Guid id);
     }
 }
