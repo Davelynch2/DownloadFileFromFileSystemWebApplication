@@ -13,6 +13,8 @@ namespace DownloadFileFromFileSystemWebApplication
 {
     public class Program
     {
+        //"Server=jfgibeau01\\SQL2017;Database=DocumentFileSystemDJ; MultipleActiveResultSets=True;Trusted_Connection=True" : remote DB
+        //"Server=(local)\\SQLEXPRESS;Database=DocumentFileSystem;Trusted_Connection=True" : local DB
         public static void Main(string[] args)
         {
             IHost host = null;
@@ -40,7 +42,9 @@ namespace DownloadFileFromFileSystemWebApplication
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder
+                    .UseKestrel()
+                    .UseStartup<Startup>();
                 });
                 
 
