@@ -1,4 +1,5 @@
-﻿using DownloadFileFromFileSystemWebApplication.Repositories;
+﻿using DownloadFileFromFileSystemWebApplication.Models;
+using DownloadFileFromFileSystemWebApplication.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace DownloadFileFromFileSystemWebApplication.Extension
     {
         public static void AddDependency(this IServiceCollection services)
         {
+            services.AddSingleton<FileCache>();
             services.AddScoped<IDocumentRepository, DocumentRepository>();
         }
     }

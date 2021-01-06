@@ -25,7 +25,7 @@ namespace DownloadFileFromFileSystemWebApplication.Repositories
             var file = documentUpload.GetByteArrayData();
             var document = new Document(documentUpload);
 
-            _fileCache.TryAdd(document);
+            //_fileCache.TryAdd(document);
             WriteFile(document.Location, file);
 
             _context.Documents.Add(document);
@@ -42,14 +42,18 @@ namespace DownloadFileFromFileSystemWebApplication.Repositories
             return GetDocumentData(document);
         }
 
-        //private Document TryGetValueOrAddValue(Guid id)
-        //{
-        //    return !_fileCache.TryGetValue(id, out var fileLocation) ?
-        //}
-        //private string AddValueFromDbToCache(Guid id)
-        //{
-
-        //}
+        private string TryGetValueOrAddValue(Guid id)
+        {
+            //return !_fileCache.TryGetValue(id, out var fileLocation) ?
+            //        AddValueFromDbToCache(id).Result : fileLocation;
+            return AddValueFromDbToCache(id).Result;
+        }
+        private async Task<string> AddValueFromDbToCache(Guid id)
+        {
+            var document = await _context.Documents.Where(d => d.Id == id).FirstOrDefaultAsync();
+            //_fileCache.TryAdd(document);
+            return document.Location;
+        }
 
         // Read document document location
         private FileStreamResult GetDocumentData(Document document)
@@ -63,12 +67,11 @@ namespace DownloadFileFromFileSystemWebApplication.Repositories
             return result;
         }
 
-        public async Task<Document> FindDocument(Guid id)
+        public string FindDocument(Guid id)
         {
-            return await _context.Documents.Where(d => d.Id == id).FirstOrDefaultAsync();
+            return TryGetValueOrAddValue(id);
+            //return await _context.Documents.Where(d => d.Id == id).FirstOrDefaultAsync();
         }
-
-
     }
 
  
