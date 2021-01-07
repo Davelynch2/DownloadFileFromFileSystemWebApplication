@@ -12,7 +12,7 @@ namespace DownloadFileFromFileSystemWebApplication.Extension
     {
         public static void AddDependency(this IServiceCollection services)
         {
-            services.AddSingleton<FileCache>();
+            services.AddSingleton<FileCache>(); // may be need to be removed
             services.AddScoped<IDocumentRepository, DocumentRepository>();
         }
     }
