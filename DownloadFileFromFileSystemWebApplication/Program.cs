@@ -13,8 +13,6 @@ namespace DownloadFileFromFileSystemWebApplication
 {
     public class Program
     {
-        //"Server=jfgibeau01\\SQL2017;Database=DocumentFileSystemDJ; MultipleActiveResultSets=True;Trusted_Connection=True" : remote DB
-        //"Server=(local)\\SQLEXPRESS;Database=DocumentFileSystem;Trusted_Connection=True" : local DB
         public static void Main(string[] args)
         {
             IHost host = null;
@@ -47,7 +45,6 @@ namespace DownloadFileFromFileSystemWebApplication
                     .UseStartup<Startup>();
                 });
                 
-
         private static void CreateDbIfNotExists(IHost host)
         {
             using var scope = host.Services.CreateScope();
@@ -56,9 +53,9 @@ namespace DownloadFileFromFileSystemWebApplication
                 var context = scope.ServiceProvider.GetRequiredService<DocumentContext>();
                 context.EnsureDatabaseCreated();
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
         }
     }
