@@ -1,0 +1,29 @@
+# syntax=docker/dockerfile:experimental
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
+WORKDIR /app
+
+# Kestrel settings
+ENV ASPNETCORE_URLS="http://+:8080"
+# container listen to port 8080 and this port is mapped to local host
+#EXPOSE 80
+#EXPOSE 443
+
+# Environment variables
+
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
+WORKDIR /src
+COPY ["DownloadFileFromFileSystemWebApplication/DownloadFileFromFileSystemWebApplication.csproj", "DownloadFileFromFileSystemWebApplication/"]
+RUN dotnet restore "DownloadFileFromFileSystemWebApplication/DownloadFileFromFileSystemWebApplication.csproj"
+COPY . .
+WORKDIR "/src/DownloadFileFromFileSystemWebApplication"
+RUN dotnet build "DownloadFileFromFileSystemWebApplication.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "DownloadFileFromFileSystemWebApplication.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "DownloadFileFromFileSystemWebApplication.dll"]
