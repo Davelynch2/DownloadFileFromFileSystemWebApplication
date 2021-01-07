@@ -1,14 +1,22 @@
-﻿{
+{
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
     "DownloadFileFromFileSystemWebApplication": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "weatherforecast",
-      "applicationUrl": "https://localhost:44399",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CONFIG_SQL_CONNECTION": "Server=(local)\\SQLEXPRESS;Database=DocumentFileSystem;Trusted_Connection=True"
+      },
+      "applicationUrl": "https://localhost:44399"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/weatherforecast",
+      "publishAllPorts": true,
+      "useSSL": true
     }
   }
 }
