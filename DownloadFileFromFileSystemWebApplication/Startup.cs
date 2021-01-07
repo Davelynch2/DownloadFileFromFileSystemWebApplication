@@ -18,17 +18,20 @@ namespace DownloadFileFromFileSystemWebApplication
 {
     public class Startup
     {
+        private static ApiConfiguration _apiConfiguration;
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _apiConfiguration = new ApiConfiguration(configuration);
+            //Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        //public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DocumentContext>(options => options.UseSqlServer(Configuration.GetConnectionString("dbDocumentsContext")));
+            services.AddSingleton(typeof(ApiConfiguration), _apiConfiguration);
+            services.AddDbContext<DocumentContext>(options => options.UseSqlServer(_apiConfiguration.SqlConnection));
             services.AddDependency();
             services.AddControllers();
         }
