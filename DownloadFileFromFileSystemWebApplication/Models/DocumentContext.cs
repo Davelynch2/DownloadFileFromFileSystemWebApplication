@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MySQL.Data.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace DownloadFileFromFileSystemWebApplication.Models
 {
@@ -24,8 +26,14 @@ namespace DownloadFileFromFileSystemWebApplication.Models
         }
         public DbSet<Document> Documents { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseMySQL("server=localhost;database=library;user=user;password=password");
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder); // added
+
             modelBuilder.Entity<Document>(entity =>
             {
                 entity.HasKey(e => new { e.Id, e.Revision })
