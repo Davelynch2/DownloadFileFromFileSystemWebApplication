@@ -13,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MySQL.Data.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace DownloadFileFromFileSystemWebApplication
 {
@@ -31,7 +33,12 @@ namespace DownloadFileFromFileSystemWebApplication
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(typeof(ApiConfiguration), _apiConfiguration);
-            services.AddDbContext<DocumentContext>(options => options.UseSqlServer(_apiConfiguration.SqlConnection));
+            services.AddDbContext<DocumentContext>(
+            options => options.UseMySQL(_apiConfiguration.SqlConnection));
+
+            //services.AddDbContext<DocumentContext>(options => options.UseSqlServer(_apiConfiguration.SqlConnection));
+
+
             services.AddDependency();
             services.AddControllers();
         }
