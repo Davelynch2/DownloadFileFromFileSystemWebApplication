@@ -11,6 +11,7 @@ ENV ASPNETCORE_URLS="http://+:8080"
 #EXPOSE 443
 
 # Environment variables
+ENV CONFIG_SQL_CONNECTION="server=mysql;database=DocumentFileSystem;user=user;password=password"
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src

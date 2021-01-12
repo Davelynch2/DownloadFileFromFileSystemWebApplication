@@ -2,7 +2,18 @@ version: '3.4'
 
 services:
   downloadfilefromfilesystemwebapplication:
-    image: ${DOCKER_REGISTRY-}downloadfilefromfilesystemwebapplication
-    build:
-      context: .
-      dockerfile: DownloadFileFromFileSystemWebApplication/Dockerfile
+    image: downloadfilefromfilesystemwebapplication
+    ports:
+        - "8888:8080"
+    environment:
+        - CONFIG_SQL_CONNECTION=server=mysql;database=DocumentFileSystem;user=user;password=password
+  mysql:
+    image: mysql
+    restart: always
+    environment:
+         MYSQL_ROOT_PASSWORD: password
+    volumes:
+           - mysql-db/var/lib/mysql
+
+volumes:
+ mysql-db:
